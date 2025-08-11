@@ -4,9 +4,9 @@
 Release -1: 
 
 Protimer_Application : 
-Thread 1 : Protimer, WDT_Refresh()
-Thread 2 : MEMORY, WDT_Refresh() and WiFi.
-Thread 3 : RTC, SW, LED, BUZZER and SPEAKER, WDT_Refresh(), CLI Scripting
+PRODUCTIVE_PROTIMER_THREAD : Protimer, WDT_Refresh()
+PROTIMER_Datalogging_THREAD : MEMORY, WDT_Refresh() and WiFi.
+PROTIMER_ACTUATORS_THREAD : RTC, SW, LED, BUZZER and SPEAKER, WDT_Refresh(), CLI Scripting
 
 Protimer_SBL
 1. Firmware update over UART

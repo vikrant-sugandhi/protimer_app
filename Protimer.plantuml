@@ -1,0 +1,130 @@
+/'---------------------------------------------------------------------------'/
+/'
+Events:
+I]. User generated:
+-------------------------------------------------------------------------------
+INC: Increment Buttom + .
+DEC: Decrement Button - .
+S_P START_PAUSE : Start/Pause/Statistics Button S/P.
+ABRT: Abort Button + and - pressed together. 
+
+II]. Statemachine generated:
+-------------------------------------------------------------------------------
+TICK: Countup or Countdown event.
+tik_ss: 10ms time delay (timer can be used or non blocking loop)
+
+'/
+
+/'
+set_time  - (time in minutes)
+curr_time - (time in minutes)
+elap_time - (time in minutes)
+ss - (time in 10 miliSeconds)
+
+So,  1 ss : 100mSec  or 0.1 Sec
+and  2 ss : 200mSec  or 0.2 Sec
+and  5 ss : 500mSec  or 0.5 Sec
+and 10 ss : 1000mSec or 1.0 Sec
+and 600 ss : 60000mSec or 60 Sec or 1 minute
+
+'/
+
+@startuml protimer
+'comment
+'scale 400 width
+/' States '/
+CREATE_THREADS:               /' API for threads creation '/
+PROTIMER_ACTUATORS_THREAD:    /' PROTIMER_ACTUATORS Thread Run '/
+PROTIMER_Datalogging_THREAD:  /' PROTIMER_Datalogging Thread Run '/
+PRODUCTIVE_PROTIMER_THREAD:   /' PROTIMER_Datalogging Thread Run '/
+IDLE:
+STAT:
+SET:
+COUNT:
+PAUSE:
+ACTION:
+LOGGING:
+ENDOFSESSION:
+
+
+[*] --> CREATE_THREADS
+
+CREATE_THREADS-->PRODUCTIVE_PROTIMER_THREAD: / me->prod_time = 0; me->ActiveState = IDLE;
+PRODUCTIVE_PROTIMER_THREAD-->IDLE: / me->prod_time = 0; me->ActiveState = IDLE;
+
+CREATE_THREADS-->PROTIMER_ACTUATORS_THREAD: / me->prod_time = 0; me->ActiveState = IDLE;
+PROTIMER_ACTUATORS_THREAD-->ACTION: / me->prod_time = 0; me->ActiveState = IDLE;
+
+CREATE_THREADS-->PROTIMER_Datalogging_THREAD: / me->prod_time = 0; me->ActiveState = IDLE;
+PROTIMER_Datalogging_THREAD-->LOGGING: / me->prod_time = 0; me->ActiveState = IDLE;
+
+/' State Transition '/
+IDLE: entry /
+IDLE: me->set_time = 0; me->curr_time = 0;
+note left of IDLE : this is a short\nnote
+IDLE: me->elap_time = 0; e->ss=0;
+IDLE: disp_msg("Set time press '+' "); 
+IDLE: disp_time(set_time);
+IDLE: 
+IDLE: Watchdog_Refresh();
+IDLE: exit / disp_clr();
+IDLE: 
+IDLE-->IDLE: ! INC
+IDLE-->SET: INC / me->set_time += 60;
+
+SET-->IDLE: ABRT
+SET-->COUNT: START_PAUSE[me->set_time > 0]
+SET: entry / 
+SET: disp_time(me->set_time);
+SET:
+SET: exit / 
+SET: me->curr_time = me->set_time
+SET: disp_clr();
+SET:
+SET: INC[me->set_time <= 60] / me->set_time += 60; 
+SET: DEC[me->set_time > 0] / me->set_time -= 60;
+SET: disp_time(set_time);
+
+COUNT-->IDLE: ABRT
+COUNT-->PAUSE: START_PAUSE
+COUNT: TICK[e->ss == 10] / me->curr_time--; me->elap_time++;
+COUNT: disp_time(curr_time);
+COUNT:
+COUNT: exit /
+COUNT: me->prod_time += me->elap_time;
+COUNT: me->elap_time = 0;
+state c <<choice>>
+COUNT-->c: mobj->c_time : ?
+c-->ENDOFSESSION: mobj->c_time == 0
+c-->COUNT: [else]
+
+ENDOFSESSION: entry / do_beep();
+ENDOFSESSION-->IDLE: TICK[e->ss == 5]
+PAUSE-->IDLE: ABRT
+PAUSE: entry /
+PAUSE: disp_time(me->curr_time);
+PAUSE:
+PAUSE-->SET: INC[me->set_time <= 60] / me->set_time += 60; 
+PAUSE-->SET: DEC[me->set_time > 0] / me->set_time -= 60;
+PAUSE-->COUNT: START_PAUSE
+PAUSE: Watchdog_Refresh();
+
+STAT-->IDLE: TICK[e->ss == 2]  
+IDLE-->STAT: START_PAUSE
+STAT:entry /
+STAT: disp_time(prod_time);
+STAT: disp_msg("Productive time: "); 
+
+/' Thread for Actuators '/
+ACTION: Watchdog_Refresh();
+ACTION: TurnOn_Buzzer();
+ACTION: TurnOn_Speaker();
+ACTION: SET_LED();
+ACTION: READ_RTC();
+
+/' Thread for Data Logging '/
+LOGGING: Watchdog_Refresh();
+LOGGING: memory_erase();
+LOGGING: memory_write();
+LOGGING: memory_read();
+@enduml
