@@ -1,0 +1,76 @@
+@startuml
+
+autonumber
+/'participant Participant as Foo
+actor Actor as Foo1
+boundary Boundary as Foo2
+control Control as Foo3
+entity Entity as Foo4
+database Database as Foo5
+collections Collections as Foo6
+queue Queue as Foo7'/
+skinparam actorStyle awesome
+actor User as User
+participant GpioIsr as GpioIsr
+participant UartIsr as UartIsr
+participant CommandHandler as CommandHandler
+queue CommandQueue as CommandQueue
+participant StateHandler as StateHandler
+queue OutputQueue as OutputQueue
+participant Output as Output
+
+
+
+activate User
+activate Output
+
+User -> GpioIsr : key i/p
+activate GpioIsr
+GpioIsr -> CommandHandler : To decode
+deactivate GpioIsr
+
+activate CommandHandler
+CommandHandler -> CommandHandler : process i/p
+CommandHandler -> CommandQueue : command
+deactivate CommandHandler
+
+activate CommandQueue
+CommandQueue -> StateHandler : command
+deactivate CommandQueue
+
+activate StateHandler
+StateHandler -> StateHandler : state mc
+StateHandler -> OutputQueue: notify
+deactivate StateHandler
+
+activate OutputQueue
+OutputQueue -> Output : To Output
+deactivate OutputQueue
+
+...
+autonumber
+User -> UartIsr : uart i/p
+activate UartIsr
+UartIsr -> CommandHandler : To decode
+deactivate UartIsr
+
+activate CommandHandler
+CommandHandler -> CommandHandler : process i/p
+CommandHandler -> CommandQueue : command
+deactivate CommandHandler
+
+activate CommandQueue
+CommandQueue -> StateHandler : command
+deactivate CommandQueue
+
+activate StateHandler
+StateHandler -> StateHandler : state mc
+StateHandler -> OutputQueue: notify
+deactivate StateHandler
+
+activate OutputQueue
+OutputQueue -> Output : To Output
+deactivate OutputQueue
+
+
+@enduml

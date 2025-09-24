@@ -1,0 +1,42 @@
+@startuml
+json "<b>JSON basic element" as J {
+"null": null,
+"true": true,
+"false": false,
+"JSON_Number": [-1, -1.1, "<color:green>TBC"],
+"JSON_String": "a\nb\rc\td <color:green>TBC...",
+"JSON_Object": {
+"{}": {},
+"k_int": 123,
+"k_str": "abc",
+"k_obj": {"k": "v"}
+},
+"JSON_Array" : [
+[],
+[true, false],
+[-1, 1],
+["a", "b", "c"],
+["mix", null, true, 1, {"k": "v"}]
+],
+"JSON_Array1" :{
+    "fruit":"Apple",
+    "size":"Large",
+    "color": ["Red", "Green"]
+},
+"DecimalNumber" :{
+"DecimalNumber": [-1, 0, 1],
+"DecimalNumber . Digits": [-1.1, 0.1, 1.1],
+"DecimalNumber ExponentPart": [1E5]
+},
+"typedef struct time": {
+"uint8_t": "hh",
+"uint8_t": "mm",
+"uint8_t": "ss"
+},
+"typedef struct date": {
+"uint8_t": "date",
+"uint8_t": "month",
+"uint16_t": "year"
+}
+}
+@enduml

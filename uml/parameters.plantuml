@@ -1,0 +1,86 @@
+@startuml
+json "<b>Parameters" as Parameters {
+"Normal Mode":
+{
+"Session Duration": ["0 sec - 60 min"],
+"Session Pre-Time":["0 sec - 60 min"],
+"Alert Tone":["Selectable"],
+"Alert Pattern":["Selectable"],
+"No. of Alert Intervals":["0 - TBD"],
+"Background Music":["NA"],
+"RGB LED Feedback":["NA"],
+"Display Graphic":["TBD"]
+},
+"Music  Mode":
+{
+"Session Duration": ["0 sec - 60 min",{"k": ["v","s","d"]},{"k": ["v","s","d"]}],
+"Session Pre-Time":["0 sec - 60 min"],
+"Alert Tone":["NA"],
+"Alert Pattern":["NA"],
+"No. of Alert Intervals":["NA"],
+"Background Music":["Selectable (MP3/WAV)"],
+"RGB LED Feedback":["NA"],
+"Display Graphic":["TBD"]
+},
+"Silent Mode":
+{
+"Session Duration": ["0 sec - 60 min"],
+"Session Pre-Time":["0 sec - 60 min"],
+"Alert Tone":["NA","A","B","C"],
+"Alert Pattern":["NA"],
+"No. of Alert Intervals":["Default (6)"],
+"Background Music":["NA"],
+"RGB LED Feedback":["VIBGYOR pattern"],
+"Display Graphic":["TBD"]
+},
+"Custom  Mode":
+{
+"Session Duration": ["0 sec - 60 min"],
+"Session Pre-Time":["0 sec - 60 min"],
+"Alert Tone":["Selectable"],
+"Alert Pattern":["Selectable"],
+"No. of Alert Intervals":["0 - TBD"],
+"Background Music":["Selectable (MP3/WAV)"],
+"RGB LED Feedback":["VIBGYOR pattern"],
+"Display Graphic":["TBD"]
+}
+
+
+}
+
+/'"0 sec - 60 min", "0 sec - 60 min", "0 sec - 60 min"	,"0 sec - 60 min"
+
+
+"Normal Mode":{"Session Duration":[],
+"Session Pre-Time":[],
+"Alert Tone":[],
+"Alert Pattern":[],
+"No. of Alert Intervals":[],
+"Background Music":[],
+"RGB LED Feedback":[],
+"Display Graphic":[]},
+
+"Normal Mode1":{}
+
+"Session Duration":{},
+"Session Pre-Time":{},
+"Alert Tone":{},
+"Alert Pattern":{},
+"No. of Alert Intervals":{},
+"Background Music":{},
+"RGB LED Feedback":{},
+"Display Graphic":{}
+
+
+"Session Duration":{},
+"Session Pre-Time":{},
+"Alert Tone":{},
+"Alert Pattern":{},
+"No. of Alert Intervals":{},
+"Background Music":{},
+"RGB LED Feedback":{},
+"Display Graphic":{}
+
+'/
+@enduml
+

@@ -1,0 +1,27 @@
+@startuml
+!pragma teoz true
+
+participant "<size:12>«task»\n**Receiver**\nHigh Prio" as receiver
+queue "Queue" as queue
+participant "<size:12>«task»\n**Sender**\nLow Prio" as sender
+
+activate receiver
+loop
+note over receiver: Wait for a message to be\ndeposited into the queue
+{pend} receiver -> queue : pend()
+deactivate receiver
+
+hnote over receiver, sender : Context switch
+
+activate sender
+note right of sender: Deposit a message\ninto the queue
+{post} sender -> queue : post()
+deactivate sender
+
+hnote over receiver, sender : Context switch
+
+activate receiver
+receiver -> receiver : consume()
+end
+
+@enduml
